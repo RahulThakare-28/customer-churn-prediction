@@ -46,4 +46,4 @@ def train_logistic(X, y):
 
     metrics = classification_metrics(y_test, y_pred, y_prob)
 
-    return pipeline, metrics
+    return  metrics
