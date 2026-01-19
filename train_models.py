@@ -1,6 +1,10 @@
 import pandas as pd
 from pathlib import Path
 
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
+
+
 from src.models.logistic import train_logistic
 from src.models.random_forest import train_random_forest
 from src.models.adaboost import train_adaboost
