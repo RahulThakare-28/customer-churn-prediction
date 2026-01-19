@@ -16,7 +16,7 @@ class DynamicColumnTransformer(BaseEstimator, TransformerMixin):
         self.ct_ = ColumnTransformer(
             transformers=[
                 ('num', StandardScaler(), self.num_cols_),
-                ('cat', OneHotEncoder(handle_unknown='ignore', sparse=False), self.cat_cols_)
+                ('cat', OneHotEncoder(handle_unknown='ignore', sparse_output=False), self.cat_cols_)
             ]
         )
 
