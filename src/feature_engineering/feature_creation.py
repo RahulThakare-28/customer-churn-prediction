@@ -9,7 +9,7 @@ class FeatureCreator(BaseEstimator, TransformerMixin):
     def transform(self, X):
         X = X.copy()
 
-        debug = True  # set False to disable printing
+        debug = False  # set False to disable printing
 
         if debug:
             print("[DEBUG] Total Revenue sample:", X['Total Revenue'].head(20).tolist())
