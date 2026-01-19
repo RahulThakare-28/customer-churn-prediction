@@ -1,10 +1,13 @@
 from sklearn.pipeline import Pipeline
-import joblib
+from src.pipelines.full_preprocessing_pipeline import build_full_pipeline
+
 
 def build_model_pipeline(model):
-    preprocessing = joblib.load("artifacts/preprocessing.joblib")
+    preprocessing = build_full_pipeline()
 
-    return Pipeline(steps=[
+    pipeline = Pipeline(steps=[
         ("preprocessing", preprocessing),
         ("model", model)
     ])
+
+    return pipeline
