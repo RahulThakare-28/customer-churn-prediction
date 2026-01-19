@@ -25,14 +25,15 @@ def train_mlp(X, y):
 
     # ---- MLP Classifier (with basic fine-tuning) ----
     model = MLPClassifier(
-        hidden_layer_sizes=(64, 32),
-        activation='relu',
-        solver='adam',
-        learning_rate='adaptive',
+        hidden_layer_sizes=(32, 16),
+        activation="relu",
+        solver="adam",
+        alpha=0.01,  # L2 regularization (IMPORTANT)
         learning_rate_init=0.001,
-        max_iter=500,
+        max_iter=300,
         early_stopping=True,
-        n_iter_no_change=20,
+        validation_fraction=0.15,
+        n_iter_no_change=15,
         random_state=42
     )
 
