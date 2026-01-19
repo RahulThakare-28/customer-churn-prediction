@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv/
+
+# IDE
+.idea/
+
+# Artifacts (optional – recommended)
+artifacts/selected_models/
+artifacts/metrics/
+
+# Data (optional)
+data/*.csv
+
+# OS
+.DS_Store
