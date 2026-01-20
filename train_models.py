@@ -31,7 +31,7 @@ def main():
 
     results = []
 
-    print("\n===== MODEL TRAINING STARTED =====")
+    print("\n ==== MODEL TRAINING STARTED =====")
 
     for name, train_fn in MODELS.items():
         print(f"Training {name} ...", end=" ")
@@ -52,7 +52,7 @@ def main():
     print(results_df[["model", "accuracy", "recall", "roc_auc"]])
 
     best_model = results_df.loc[0, "model"]
-    print(f"\n🏆 Best Model Selected: {best_model}")
+    print(f"\n Best Model Selected: {best_model}")
 
 
 if __name__ == "__main__":
