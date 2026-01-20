@@ -1,15 +1,31 @@
 import joblib
 import pandas as pd
+from pathlib import Path
 
-preprocessing = joblib.load("artifacts/preprocessing.joblib")
-model = joblib.load("artifacts/selected_models/xgboost_model.joblib")
+ROOT = Path(__file__).resolve().parent.parent
+
+model = joblib.load(
+    ROOT / "artifacts/selected_models/xgboost_model.joblib"
+)
 
 def predict_churn(customer_data: dict):
-    # Convert dict to DataFrame
     df = pd.DataFrame([customer_data])
-    # Preprocess
-    X_processed = preprocessing.transform(df)
-    # Predict
-    prediction = model.predict(X_processed)[0]
-    probability = model.predict_proba(X_processed)[0][1]
-    return {"churn": int(prediction), "probability": float(probability)}
+
+    # Pipeline handles preprocessing internally
+    prediction = model.predict(df)[0]
+    probability = model.predict_proba(df)[0][1]
+
+    return {
+        "churn": int(prediction),
+        "probability": float(probability)
+    }
+
+sample_customer = {
+    "Gender": "Male",
+    "Senior Citizen": "No",
+    "Partner": "Yes",
+
+}
+
+result = predict_churn(sample_customer)
+print(result)

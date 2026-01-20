@@ -1,6 +1,6 @@
 import streamlit as st
 from pymongo import MongoClient
-from predict import predict_churn  # your function from above
+from app.predict import predict_churn  # your function from above
 
 st.title("Customer Churn Prediction")
 
