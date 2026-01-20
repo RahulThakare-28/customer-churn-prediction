@@ -10,11 +10,11 @@ __pycache__/
 .idea/
 
 # Artifacts (optional – recommended)
-artifacts/selected_models/
-artifacts/metrics/
+artifacts/
 
 # Data (optional)
 data/*.csv
 
 # OS
 .DS_Store
+artifacts/
