@@ -6,7 +6,7 @@ from xgboost import XGBClassifier
 from src.pipelines.model_pipeline import build_model_pipeline
 from src.evaluation.metrics import classification_metrics
 from src.evaluation.metrics_logger import save_metrics
-
+from src.utils.artifact_utils import ensure_artifact_dir
 
 def train_xgboost(X, y):
     # ---- Encode target ----
@@ -63,9 +63,10 @@ def train_xgboost(X, y):
     )
 
     # ---- Save model ----
+    artifact_dir = ensure_artifact_dir()
+
     joblib.dump(
         pipeline,
-        "artifacts/selected_models/xgboost_model.joblib"
+        artifact_dir / "xgboost_model.joblib"
     )
-
     return metrics

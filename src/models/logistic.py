@@ -6,6 +6,8 @@ from sklearn.preprocessing import LabelEncoder
 from src.pipelines.full_preprocessing_pipeline import build_full_pipeline
 from src.evaluation.metrics import classification_metrics
 import joblib
+from src.utils.artifact_utils import ensure_artifact_dir
+
 
 def train_logistic(X, y):
 
@@ -47,8 +49,10 @@ def train_logistic(X, y):
     metrics = classification_metrics(y_test, y_pred, y_prob)
 
     # ---- Save model ----
+    artifact_dir = ensure_artifact_dir()
+
     joblib.dump(
         pipeline,
-        "artifacts/selected_models/logistic_model.joblib"
+        artifact_dir / "logistic_model.joblib"
     )
     return  metrics

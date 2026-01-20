@@ -8,6 +8,7 @@ from src.pipelines.model_pipeline import build_model_pipeline
 from src.evaluation.metrics import classification_metrics
 from src.evaluation.metrics_logger import save_metrics
 
+from src.utils.artifact_utils import ensure_artifact_dir
 
 def train_adaboost(X, y):
     # ---- Encode target ----
@@ -65,9 +66,11 @@ def train_adaboost(X, y):
     )
 
     # ---- Save model ----
+    artifact_dir = ensure_artifact_dir()
+
     joblib.dump(
         pipeline,
-        "artifacts/selected_models/adaboost_model.joblib"
+        artifact_dir / "adaboost_model.joblib"
     )
 
     return metrics

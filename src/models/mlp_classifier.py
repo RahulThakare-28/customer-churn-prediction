@@ -6,7 +6,7 @@ from sklearn.neural_network import MLPClassifier
 from src.pipelines.model_pipeline import build_model_pipeline
 from src.evaluation.metrics import classification_metrics
 from src.evaluation.metrics_logger import save_metrics
-
+from src.utils.artifact_utils import ensure_artifact_dir
 
 def train_mlp(X, y):
     # ---- Encode target ----
@@ -64,9 +64,11 @@ def train_mlp(X, y):
     )
 
     # ---- Save model ----
+    artifact_dir = ensure_artifact_dir()
+
     joblib.dump(
         pipeline,
-        "artifacts/selected_models/mlp_classifier_model.joblib"
+        artifact_dir / "mlp_classifier_model.joblib"
     )
 
     return metrics
