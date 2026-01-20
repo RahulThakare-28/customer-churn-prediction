@@ -6,7 +6,7 @@ from src.pipelines.preprocessing_pipeline import build_preprocessing_pipeline
 
 DATA_PATH = Path("data/telco.csv")
 TARGET = "Churn Label"
-ARTIFACT_PATH = Path("artifacts")
+ARTIFACT_PATH = Path("src/pipelines/artifacts")
 
 def main():
     ARTIFACT_PATH.mkdir(exist_ok=True)
