@@ -4,7 +4,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 
 class DynamicColumnTransformer(BaseEstimator, TransformerMixin):
-    def __init__(self):
+    def __init__(self, X_sample):
         self.ct_ = None
         self.cat_cols_ = None
         self.num_cols_ = None
@@ -25,3 +25,6 @@ class DynamicColumnTransformer(BaseEstimator, TransformerMixin):
 
     def transform(self, X):
         return self.ct_.transform(X)
+
+
+
