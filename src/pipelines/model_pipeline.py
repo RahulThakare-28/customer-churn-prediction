@@ -1,13 +1,20 @@
 from sklearn.pipeline import Pipeline
-from src.pipelines.full_preprocessing_pipeline import build_full_pipeline
+import joblib
+from pathlib import Path
+
+PREPROCESSING_PATH = Path("artifacts/preprocessing.joblib")
 
 
 def build_model_pipeline(model):
-    preprocessing = build_full_pipeline()
+    if not PREPROCESSING_PATH.exists():
+        raise FileNotFoundError(
+            "Preprocessing pipeline not found. "
+            "Run src/pipelines/train_preprocessing.py first."
+        )
 
-    pipeline = Pipeline(steps=[
+    preprocessing = joblib.load(PREPROCESSING_PATH)
+
+    return Pipeline(steps=[
         ("preprocessing", preprocessing),
         ("model", model)
     ])
-
-    return pipeline
