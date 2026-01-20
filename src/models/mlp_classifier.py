@@ -1,6 +1,6 @@
 import joblib
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.preprocessing import LabelEncoder
 from sklearn.neural_network import MLPClassifier
 
 from src.pipelines.model_pipeline import build_model_pipeline
@@ -8,11 +8,12 @@ from src.evaluation.metrics import classification_metrics
 from src.evaluation.metrics_logger import save_metrics
 from src.utils.artifact_utils import ensure_artifact_dir
 
+
 def train_mlp(X, y):
+
     # ---- Encode target ----
     le = LabelEncoder()
     y_encoded = le.fit_transform(y)
-    joblib.dump(le, "artifacts/selected_models/label_encoder.joblib")
 
     # ---- Train-test split ----
     X_train, X_test, y_train, y_test = train_test_split(
@@ -23,12 +24,12 @@ def train_mlp(X, y):
         random_state=42
     )
 
-    # ---- MLP Classifier (with basic fine-tuning) ----
+    # ---- MLP Classifier ----
     model = MLPClassifier(
         hidden_layer_sizes=(32, 16),
         activation="relu",
         solver="adam",
-        alpha=0.01,  # L2 regularization (IMPORTANT)
+        alpha=0.01,
         learning_rate_init=0.001,
         max_iter=300,
         early_stopping=True,
@@ -38,7 +39,6 @@ def train_mlp(X, y):
     )
 
     # ---- Pipeline ----
-    # Important: scale numeric features before MLP
     pipeline = build_model_pipeline(model)
     pipeline.fit(X_train, y_train)
 
@@ -49,26 +49,24 @@ def train_mlp(X, y):
     # ---- Metrics ----
     metrics = classification_metrics(y_test, y_pred, y_prob)
 
+    tn, fp, fn, tp = metrics["confusion_matrix"].ravel()
+
     # ---- Save metrics ----
     save_metrics(
         {
             "accuracy": metrics["accuracy"],
             "recall": metrics["recall"],
             "roc_auc": metrics["roc_auc"],
-            "tn": metrics["confusion_matrix"][0][0],
-            "fp": metrics["confusion_matrix"][0][1],
-            "fn": metrics["confusion_matrix"][1][0],
-            "tp": metrics["confusion_matrix"][1][1],
+            "tn": int(tn),
+            "fp": int(fp),
+            "fn": int(fn),
+            "tp": int(tp),
         },
         model_name="MLPClassifier"
     )
 
     # ---- Save model ----
     artifact_dir = ensure_artifact_dir()
-
-    joblib.dump(
-        pipeline,
-        artifact_dir / "mlp_classifier_model.joblib"
-    )
+    joblib.dump(pipeline, artifact_dir / "mlp_classifier_model.joblib")
 
     return metrics
