@@ -1,21 +1,20 @@
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder
 
-from src.pipelines.full_preprocessing_pipeline import build_full_pipeline
+from src.pipelines.model_pipeline import build_model_pipeline
 from src.evaluation.metrics import classification_metrics
-import joblib
 from src.utils.artifact_utils import ensure_artifact_dir
+import joblib
 
 
 def train_logistic(X, y):
 
-    # ---- Encode target (correct) ----
+    # ---- Encode target ----
     le = LabelEncoder()
     y_encoded = le.fit_transform(y)   # No=0, Yes=1
 
-    # ---- Train-test split FIRST ----
+    # ---- Train-test split ----
     X_train, X_test, y_train, y_test = train_test_split(
         X,
         y_encoded,
@@ -24,25 +23,19 @@ def train_logistic(X, y):
         random_state=42
     )
 
-    # ---- Fresh preprocessing (NOT pre-fitted) ----
-    preprocessing = build_full_pipeline()
-
     model = LogisticRegression(
         max_iter=1000,
         class_weight="balanced",
         solver="lbfgs"
     )
 
-    # ---- SAFE pipeline ----
-    pipeline = Pipeline(steps=[
-        ("preprocessing", preprocessing),
-        ("model", model)
-    ])
+    # ---- CORRECT pipeline (loads preprocessing) ----
+    pipeline = build_model_pipeline(model)
 
-    # ---- Fit ONLY on train ----
+    # ---- Fit ----
     pipeline.fit(X_train, y_train)
 
-    # ---- Evaluate on test ----
+    # ---- Evaluate ----
     y_pred = pipeline.predict(X_test)
     y_prob = pipeline.predict_proba(X_test)[:, 1]
 
@@ -50,9 +43,6 @@ def train_logistic(X, y):
 
     # ---- Save model ----
     artifact_dir = ensure_artifact_dir()
+    joblib.dump(pipeline, artifact_dir / "logistic_model.joblib")
 
-    joblib.dump(
-        pipeline,
-        artifact_dir / "logistic_model.joblib"
-    )
-    return  metrics
+    return metrics
