@@ -1,30 +1,39 @@
 import json
 import pandas as pd
 from pathlib import Path
-
+import numpy as np
 
 METRICS_DIR = Path("artifacts/metrics")
 METRICS_DIR.mkdir(parents=True, exist_ok=True)
 
+def _to_python_type(obj):
+    """
+    Convert numpy types to native Python types
+    for JSON serialization.
+    """
+    if isinstance(obj, np.integer):
+        return int(obj)
+    if isinstance(obj, np.floating):
+        return float(obj)
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+    return obj
 
 def save_metrics(metrics: dict, model_name: str):
-    """
-    Save metrics in both CSV (for comparison)
-    and JSON (for detailed inspection).
-    """
+    safe_metrics = {k: _to_python_type(v) for k, v in metrics.items()}
 
-    # ---- JSON (single model) ----
+    # ---- JSON ----
     json_path = METRICS_DIR / f"{model_name}_metrics.json"
     with open(json_path, "w") as f:
-        json.dump(metrics, f, indent=4)
+        json.dump(safe_metrics, f, indent=4)
 
-    # ---- CSV (append or create) ----
-    csv_path = METRICS_DIR / "baseline_metrics.csv"
-
-    row = metrics.copy()
+    # ---- CSV ----
+    row = safe_metrics.copy()
     row["model"] = model_name
 
     df_row = pd.DataFrame([row])
+
+    csv_path = METRICS_DIR / "baseline_metrics.csv"
 
     if csv_path.exists():
         df_existing = pd.read_csv(csv_path)
