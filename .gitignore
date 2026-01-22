@@ -10,7 +10,7 @@ __pycache__/
 .idea/
 
 # Artifacts (optional – recommended)
-
+.artifacts/
 # Data (optional)
 data/*.csv
 

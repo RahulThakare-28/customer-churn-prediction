@@ -1,0 +1,19 @@
+
+
+
+.stApp {
+    background-color: #f5f7fa;
+}
+
+.metric-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.nav-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1f77b4;
+}
