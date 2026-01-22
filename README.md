@@ -96,6 +96,7 @@ customer-churn-prediction/
 ---
 ## How to run 
 * using train_models.py file
+![Project Demo](model_training.png)
 
 ## Next Steps 
 
