@@ -1,8 +1,10 @@
 import joblib
 from pathlib import Path
 
-PREPROCESSING_PATH = Path("artifacts/preprocessing.joblib")
-MODEL_PATH = Path("artifacts/selected_models/logistic_model.joblib")  # Best selected
+ARTIFACTS_DIR = Path("artifacts")
+
+PREPROCESSING_PATH = ARTIFACTS_DIR / "preprocessing.joblib"
+MODEL_PATH = ARTIFACTS_DIR / "selected_models" / "logistic_model.joblib"
 
 def load_artifacts():
     preprocessing = joblib.load(PREPROCESSING_PATH)
